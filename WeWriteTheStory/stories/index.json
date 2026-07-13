@@ -1,0 +1,35 @@
+{
+    "stories": [
+        { "id": "example", "name": "example.story", "title": "神秘森林" },
+        { "id": "horror_school_prologue", "name": "horror_school_prologue.story", "title": "校园惊魂·序章" },
+        { "id": "horror_school_chapter1", "name": "horror_school_chapter1.story", "title": "校园惊魂·第一章" },
+        { "id": "horror_school_chapter2", "name": "horror_school_chapter2.story", "title": "校园惊魂·第二章" },
+        { "id": "horror_school_chapter3", "name": "horror_school_chapter3.story", "title": "校园惊魂·第三章" },
+        { "id": "horror_school_chapter4", "name": "horror_school_chapter4.story", "title": "校园惊魂·第四章" },
+        { "id": "the_stolen_coffin_hard", "name": "盗棺笔记(Hard).story", "title": "盗棺笔记(Hard)" },
+        { "id": "hechuan_old_records_hard", "name": "盗棺笔记：河川旧录(Hard).story", "title": "盗棺笔记：河川旧录(Hard)" }
+    ],
+    "collections": [
+        {
+            "id": "horror_school_collection",
+            "title": "📚 校园惊魂系列",
+            "description": "一个关于学校恐怖事件的系列故事",
+            "stories": [
+                { "id": "horror_school_prologue", "title": "序章-晚自习后" },
+                { "id": "horror_school_chapter1", "title": "第一章-失踪的学生" },
+                { "id": "horror_school_chapter2", "title": "第二章-午夜钟声" },
+                { "id": "horror_school_chapter3", "title": "第三章-档案室的秘密" },
+                { "id": "horror_school_chapter4", "title": "第四章-最终决战" }
+            ]
+        },
+        {
+            "id": "the_stolen_coffin_hard_collection",
+            "title": "⚰️ 盗棺笔记系列(Hard)",
+            "description": "【9.5难度】极难模式！盗棺笔记正传与河川旧录的高难度整合版。每一步都是生死抉择，每一次QTE都是极限挑战。需要练习才能通关，但绝非不可战胜。",
+            "stories": [
+                { "id": "the_stolen_coffin_hard", "title": "盗棺笔记(Hard)" },
+                { "id": "hechuan_old_records_hard", "title": "河川旧录(Hard)" }
+            ]
+        }
+    ]
+}
