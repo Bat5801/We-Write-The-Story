@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NODA - 故事节点编辑器</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="editor-container">
+      <div id="toolbar">
+        <div class="toolbar-left">
+          <div class="logo">
+            <span class="logo-icon">◈</span>
+            <span class="logo-text">NODA</span>
+          </div>
+          <div class="divider"></div>
+          <button class="toolbar-btn" onclick="editor.newStory()">
+            <span class="btn-icon">➕</span>
+            <span>新建</span>
+          </button>
+          <button class="toolbar-btn" onclick="editor.importStory()">
+            <span class="btn-icon">📥</span>
+            <span>导入</span>
+          </button>
+          <button class="toolbar-btn" onclick="editor.exportStory()">
+            <span class="btn-icon">📤</span>
+            <span>导出</span>
+          </button>
+          <button class="toolbar-btn" onclick="editor.testStory()">
+            <span class="btn-icon">▶️</span>
+            <span>测试</span>
+          </button>
+          <button class="toolbar-btn" onclick="editor.clearCanvas()">
+            <span class="btn-icon">🗑️</span>
+            <span>清空</span>
+          </button>
+        </div>
+        <div class="toolbar-right">
+          <button
+            class="toolbar-btn"
+            onclick="window.location.href = '../index.html'"
+          >
+            <span class="btn-icon">🏠</span>
+            <span>返回游戏</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="main-content">
+        <div id="node-panel">
+          <div class="panel-header">
+            <span class="panel-icon">📦</span>
+            <span class="panel-title">节点库</span>
+          </div>
+
+          <div class="category">
+            <div class="category-title">剧情节点</div>
+            <div
+              class="node-item"
+              data-type="story"
+              onclick="editor.addNode('story', event)"
+            >
+              <div class="node-item-icon">📝</div>
+              <div class="node-item-info">
+                <div class="node-item-name">剧情节点</div>
+                <div class="node-item-desc">添加剧情文本</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="start"
+              onclick="editor.addNode('start', event)"
+            >
+              <div class="node-item-icon">🎬</div>
+              <div class="node-item-info">
+                <div class="node-item-name">开始节点</div>
+                <div class="node-item-desc">故事起点</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="end"
+              onclick="editor.addNode('end', event)"
+            >
+              <div class="node-item-icon">🏁</div>
+              <div class="node-item-info">
+                <div class="node-item-name">结局节点</div>
+                <div class="node-item-desc">故事终点</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-title">选择分支</div>
+            <div
+              class="node-item"
+              data-type="choice"
+              onclick="editor.addNode('choice', event)"
+            >
+              <div class="node-item-icon">🔀</div>
+              <div class="node-item-info">
+                <div class="node-item-name">选择节点</div>
+                <div class="node-item-desc">创建分支选项</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-title">条件逻辑</div>
+            <div
+              class="node-item"
+              data-type="if"
+              onclick="editor.addNode('if', event)"
+            >
+              <div class="node-item-icon">🔍</div>
+              <div class="node-item-info">
+                <div class="node-item-name">条件节点</div>
+                <div class="node-item-desc">条件判断</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="check_item"
+              onclick="editor.addNode('check_item', event)"
+            >
+              <div class="node-item-icon">🎒</div>
+              <div class="node-item-info">
+                <div class="node-item-name">物品检测</div>
+                <div class="node-item-desc">检查背包物品</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="check_var"
+              onclick="editor.addNode('check_var', event)"
+            >
+              <div class="node-item-icon">📊</div>
+              <div class="node-item-info">
+                <div class="node-item-name">变量检测</div>
+                <div class="node-item-desc">检查变量值</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-title">动作节点</div>
+            <div
+              class="node-item"
+              data-type="add_item"
+              onclick="editor.addNode('add_item', event)"
+            >
+              <div class="node-item-icon">➕</div>
+              <div class="node-item-info">
+                <div class="node-item-name">添加物品</div>
+                <div class="node-item-desc">添加到背包</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="remove_item"
+              onclick="editor.addNode('remove_item', event)"
+            >
+              <div class="node-item-icon">➖</div>
+              <div class="node-item-info">
+                <div class="node-item-name">移除物品</div>
+                <div class="node-item-desc">从背包移除</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="set_var"
+              onclick="editor.addNode('set_var', event)"
+            >
+              <div class="node-item-icon">⚙️</div>
+              <div class="node-item-info">
+                <div class="node-item-name">设置变量</div>
+                <div class="node-item-desc">修改变量值</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="add_var"
+              onclick="editor.addNode('add_var', event)"
+            >
+              <div class="node-item-icon">📈</div>
+              <div class="node-item-info">
+                <div class="node-item-name">增加变量</div>
+                <div class="node-item-desc">变量值递增</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="sub_var"
+              onclick="editor.addNode('sub_var', event)"
+            >
+              <div class="node-item-icon">📉</div>
+              <div class="node-item-info">
+                <div class="node-item-name">减少变量</div>
+                <div class="node-item-desc">变量值递减</div>
+              </div>
+            </div>
+            <div
+              class="node-item"
+              data-type="toggle_var"
+              onclick="editor.addNode('toggle_var', event)"
+            >
+              <div class="node-item-icon">🔄</div>
+              <div class="node-item-info">
+                <div class="node-item-name">切换变量</div>
+                <div class="node-item-desc">布尔值切换</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-title">跳转节点</div>
+            <div
+              class="node-item"
+              data-type="goto"
+              onclick="editor.addNode('goto', event)"
+            >
+              <div class="node-item-icon">🔗</div>
+              <div class="node-item-info">
+                <div class="node-item-name">跳转节点</div>
+                <div class="node-item-desc">跳转到指定节点</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="category">
+            <div class="category-title">地图节点</div>
+            <div
+              class="node-item"
+              data-type="location"
+              onclick="editor.addNode('location', event)"
+            >
+              <div class="node-item-icon">📍</div>
+              <div class="node-item-info">
+                <div class="node-item-name">地点节点</div>
+                <div class="node-item-desc">设置当前地点</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="canvas-container">
+          <div id="canvas-scroll-area">
+            <div id="canvas-inner">
+              <div id="canvas-grid"></div>
+              <svg id="connections-svg"></svg>
+              <div id="nodes-container"></div>
+            </div>
+          </div>
+
+          <div class="canvas-hint" id="canvas-hint">
+            <span class="hint-icon">💡</span>
+            <span>从左侧点击节点添加到画布</span>
+          </div>
+        </div>
+
+        <div id="properties-panel">
+          <div class="panel-header">
+            <span class="panel-icon">⚙️</span>
+            <span class="panel-title">属性面板</span>
+          </div>
+
+          <div id="properties-empty" class="properties-empty">
+            <span>选择节点以编辑属性</span>
+          </div>
+
+          <div id="properties-content" class="properties-content hidden">
+            <div class="property-group">
+              <label class="property-label">节点ID</label>
+              <input
+                type="text"
+                id="prop-id"
+                class="property-input"
+                oninput="editor.updateNodeProperty('id', this.value)"
+              />
+            </div>
+
+            <div id="prop-story-title" class="property-group">
+              <label class="property-label">节点标题</label>
+              <input
+                type="text"
+                id="prop-title"
+                class="property-input"
+                oninput="editor.updateNodeProperty('title', this.value)"
+              />
+            </div>
+
+            <div id="prop-story-text" class="property-group">
+              <label class="property-label">剧情文本</label>
+              <textarea
+                id="prop-text"
+                class="property-textarea"
+                oninput="editor.updateNodeProperty('text', this.value)"
+              ></textarea>
+            </div>
+
+            <div id="prop-choices" class="property-group">
+              <label class="property-label">选项列表</label>
+              <div id="choices-list"></div>
+              <button class="add-btn" onclick="editor.addChoice()">
+                + 添加选项
+              </button>
+            </div>
+
+            <div id="prop-condition" class="property-group">
+              <label class="property-label">条件判断</label>
+              <select
+                id="prop-condition-type"
+                class="property-select"
+                onchange="
+                  editor.updateNodeProperty('conditionType', this.value)
+                "
+              >
+                <option value="equals">等于 (==)</option>
+                <option value="not_equals">不等于 (!=)</option>
+                <option value="greater">大于 (>)</option>
+                <option value="less">小于 (<)</option>
+                <option value="greater_equal">大于等于 (>=)</option>
+                <option value="less_equal">小于等于 (<=)</option>
+              </select>
+              <input
+                type="text"
+                id="prop-condition-value"
+                class="property-input"
+                placeholder="条件值"
+                oninput="
+                  editor.updateNodeProperty('conditionValue', this.value)
+                "
+              />
+            </div>
+
+            <div id="prop-item" class="property-group">
+              <label class="property-label">物品ID</label>
+              <input
+                type="text"
+                id="prop-item-id"
+                class="property-input"
+                oninput="editor.updateNodeProperty('itemId', this.value)"
+              />
+            </div>
+
+            <div id="prop-variable" class="property-group">
+              <label class="property-label">变量名</label>
+              <input
+                type="text"
+                id="prop-var-name"
+                class="property-input"
+                oninput="editor.updateNodeProperty('varName', this.value)"
+              />
+            </div>
+
+            <div id="prop-value" class="property-group">
+              <label class="property-label">值</label>
+              <input
+                type="text"
+                id="prop-value"
+                class="property-input"
+                oninput="editor.updateNodeProperty('value', this.value)"
+              />
+            </div>
+
+            <div id="prop-end" class="property-group">
+              <label class="property-label">结局类型</label>
+              <select
+                id="prop-end-type"
+                class="property-select"
+                onchange="editor.updateNodeProperty('endType', this.value)"
+              >
+                <option value="good">✅ 好结局</option>
+                <option value="bad">❌ 坏结局</option>
+                <option value="true">📖 真结局</option>
+                <option value="neutral">⚖️ 中立结局</option>
+                <option value="death">💀 死亡结局</option>
+              </select>
+              <textarea
+                id="prop-end-message"
+                class="property-textarea"
+                placeholder="结局描述"
+                oninput="editor.updateNodeProperty('endMessage', this.value)"
+              ></textarea>
+            </div>
+
+            <div id="prop-goto" class="property-group">
+              <label class="property-label">目标节点</label>
+              <select
+                id="prop-goto-target"
+                class="property-select"
+                onchange="editor.updateNodeProperty('gotoTarget', this.value)"
+              >
+                <option value="">选择目标节点</option>
+              </select>
+            </div>
+
+            <div id="prop-location" class="property-group">
+              <label class="property-label">地点名称</label>
+              <input
+                type="text"
+                id="prop-location-name"
+                class="property-input"
+                oninput="editor.updateNodeProperty('locationName', this.value)"
+              />
+            </div>
+
+            <div id="prop-actions" class="property-group">
+              <label class="property-label">节点动作</label>
+              <div id="actions-list"></div>
+              <div class="action-buttons">
+                <button class="mini-btn" onclick="editor.addAction('addItem')">
+                  ➕物品
+                </button>
+                <button
+                  class="mini-btn"
+                  onclick="editor.addAction('removeItem')"
+                >
+                  ➖物品
+                </button>
+                <button class="mini-btn" onclick="editor.addAction('setVar')">
+                  ⚙️变量
+                </button>
+                <button class="mini-btn" onclick="editor.addAction('addVar')">
+                  📈增加
+                </button>
+                <button class="mini-btn" onclick="editor.addAction('subVar')">
+                  📉减少
+                </button>
+                <button
+                  class="mini-btn"
+                  onclick="editor.addAction('toggleVar')"
+                >
+                  🔄切换
+                </button>
+                <button class="mini-btn" onclick="editor.addAction('goto')">
+                  🔗跳转
+                </button>
+              </div>
+            </div>
+
+            <div class="property-actions">
+              <button
+                class="action-btn delete-btn"
+                onclick="editor.deleteSelectedNode()"
+              >
+                删除节点
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="story-info-panel">
+        <div class="info-header">
+          <span class="info-icon">📝</span>
+          <span class="info-title">故事信息</span>
+          <button class="info-toggle" onclick="editor.toggleStoryInfo()">
+            ▼
+          </button>
+        </div>
+        <div id="story-info-content" class="info-content">
+          <div class="info-row">
+            <label>故事标题</label>
+            <input
+              type="text"
+              id="story-title"
+              class="info-input"
+              placeholder="输入故事标题"
+              oninput="editor.updateStoryInfo()"
+            />
+          </div>
+          <div class="info-row">
+            <label>副标题</label>
+            <input
+              type="text"
+              id="story-subtitle"
+              class="info-input"
+              placeholder="输入副标题"
+              oninput="editor.updateStoryInfo()"
+            />
+          </div>
+          <div class="info-row">
+            <label>描述</label>
+            <textarea
+              id="story-desc"
+              class="info-textarea"
+              placeholder="输入故事描述"
+              oninput="editor.updateStoryInfo()"
+            ></textarea>
+          </div>
+          <div class="info-row">
+            <label>启用功能</label>
+            <div class="info-checkboxes">
+              <label
+                ><input
+                  type="checkbox"
+                  id="enable-inventory"
+                  onchange="editor.updateFeatures()"
+                />
+                背包</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  id="enable-map"
+                  onchange="editor.updateFeatures()"
+                />
+                地图</label
+              >
+            </div>
+          </div>
+          <div class="info-row">
+            <label>变量定义 (JSON)</label>
+            <textarea
+              id="story-variables"
+              class="info-textarea"
+              placeholder='{&#10;  "health": 100,&#10;  "gold": 0,&#10;  "has_key": false&#10;}'
+              oninput="editor.updateStoryInfo()"
+            ></textarea>
+          </div>
+          <div class="info-row">
+            <label>物品列表 (JSON)</label>
+            <textarea
+              id="story-items"
+              class="info-textarea"
+              placeholder='[&#10;  {"id": "key", "name": "钥匙", "icon": "🔑"},&#10;  {"id": "gem", "name": "宝石", "icon": "💎"}&#10;]'
+              oninput="editor.updateStoryInfo()"
+            ></textarea>
+          </div>
+          <div class="info-row">
+            <label>作者</label>
+            <input
+              type="text"
+              id="story-author"
+              class="info-input"
+              placeholder="作者名称"
+              oninput="editor.updateStoryInfo()"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <input
+      type="file"
+      id="file-input"
+      accept=".story,.json"
+      style="display: none"
+      onchange="editor.handleFileImport(event)"
+    />
+
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-title" id="modal-title">提示</div>
+        <div class="modal-message" id="modal-message"></div>
+        <div class="modal-buttons" id="modal-buttons"></div>
+      </div>
+    </div>
+
+    <script src="editor.js"></script>
+  </body>
+</html>
